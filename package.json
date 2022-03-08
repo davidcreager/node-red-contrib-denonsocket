@@ -2,15 +2,18 @@
   "name": "node-red-contrib-denonsocket",
   "version": "1.0.0",
   "description": "",
-  "node-red" : {
-        "nodes": {
-            "websock": "denonsock.js"
-        }
-    },
-  "main": "denonsocket.js",
+  "node-red": {
+    "nodes": {
+      "websock": "denonsock.js"
+    }
+  },
+  "main": "denonsock.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "denon-client": "^0.2.4"
+  }
 }
