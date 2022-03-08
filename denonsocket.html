@@ -1,0 +1,26 @@
+<script type="text/javascript">
+    RED.nodes.registerType('denonsock',{
+        category: 'network',
+        color: "rgb(215, 160, 160)",
+        defaults: {
+            name: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "white-globe.svg",
+        label: function() {
+            return this.name||"denonsock";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="denonsock">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="denonsock">
+    <p>A basic implementation of a websocket listener that is controlled by input message payloads eg. msg.payload.command = "connect|disconnect"  msg.payload.url = "ws://xxxxx"</p>
+</script>
