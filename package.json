@@ -4,7 +4,7 @@
   "description": "",
   "node-red": {
     "nodes": {
-      "websock": "denonsock.js"
+      "denonsock": "denonsock.js"
     }
   },
   "main": "denonsock.js",
@@ -14,6 +14,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "denon-client": "^0.2.4"
+    "denon-client": "https://github.com/davidcreager/node-denon-client.git"
   }
 }

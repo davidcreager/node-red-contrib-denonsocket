@@ -6,6 +6,8 @@ module.exports = function(RED) {
 		this.denonClient = null;
         var node = this;
 		this.sTopic = "Unset";
+		node.status({fill: "yellow", shape: "ring", text: "Initialised "});
+		node.connected = false;
 		this.sendMsg = function(ev, data) {
 			node.send( {topic:node.sTopic, payload: {"event": ev, "data": data} });
 		}
@@ -48,18 +50,27 @@ module.exports = function(RED) {
 						node.status({fill: "green", shape: "dot", text: "Connected to " + node.sURL});
 						node.connected = true;
 					})
+					.then( () => {
+						node.denonClient.getPower();
+					})
 					.catch( (err) => {
 						node.error("[denonsock] Connection failed with " + err);
 						node.status({fill: "red", shape: "ring", text: "Failed " + err})
 						node.connected = false
 					});
 			} else if ( typeof(msg.payload) == "object" &&
-							msg.payload.hasOwnProperty("command") && msg.payload.hasOwnProperty("value") ) {
-					const cmds = {setInput: true, setMute: true, setPower: true, setVolume:true}
+							msg.payload.hasOwnProperty("command") ) {
+					if (!node.connected) {
+						node.error("[denonsock][Error] Command received and socket not connected");
+						node.status({fill: "yellow", shape: "ring", text: "Disconnected "});
+						return null;
+					}
+					const cmds = {setInput: true, setMute: true, setPower: true, setVolume:true, getPower: true, getVolume: true}
 					if (cmds[msg.payload.command]) {
 						node.denonClient[msg.payload.command](msg.payload.value)
 						.then( (ret) => {
-							node.status({fill: "green", shape: "dot", text: msg.payload.command + " sent to " + node.sURL});
+							//node.status({fill: "green", shape: "dot", text: msg.payload.command + " sent to " + node.sURL});
+							node.status({fill: "red", shape: "dot", text: msg.payload.command + " ret= " + ret});
 						})
 						.catch( (err) => {
 							node.status({fill: "red", shape: "ring", text: msg.payload.command + "Failed " + err})
