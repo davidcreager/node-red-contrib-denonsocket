@@ -12,8 +12,9 @@ module.exports = function(RED) {
 			node.send( {topic:node.sTopic, payload: {"event": ev, "data": data} });
 		}
 		node.on('close', ()=> {
-			this.denonClient = null;
-			this.connected = false;
+			if (node.denonClient?.disconnect) node.denonClient.disconnect();
+			node.denonClient = null;
+			node.connected = false;
 			node.warn("Closing server ");
 		});
         node.on('input', (msg) => {
@@ -35,8 +36,9 @@ module.exports = function(RED) {
 					return null;
 				}
 				if ( (node.sURL) && (node.sURL != msg.url) ) {
-					node.wssServer.close();
+					//node.wssServer.close();
 				}
+				if (node.denonClient?.disconnect) node.denonClient.disconnect();
 				node.sURL = msg.url;
 				node.denonClient = new Denon.DenonClient(msg.url);
 				node.status({fill: "blue", shape: "ring", text: "connecting to " + node.sURL})
